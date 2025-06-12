@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DevBoard.Domain
 {
-    internal class KTClassTest
+    public class ClassKT
     {
     }
 }
