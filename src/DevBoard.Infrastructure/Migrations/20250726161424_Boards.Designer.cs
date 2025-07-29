@@ -4,6 +4,7 @@ using DevBoard.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DevBoard.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250726161424_Boards")]
+    partial class Boards
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,7 +25,7 @@ namespace DevBoard.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("DevBoard.Domain.User.Entities.RoleEnt", b =>
+            modelBuilder.Entity("DevBoard.Domain.Auth.Entities.RoleEnt", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -37,7 +40,7 @@ namespace DevBoard.Infrastructure.Migrations
                     b.ToTable("Role", (string)null);
                 });
 
-            modelBuilder.Entity("DevBoard.Domain.User.Entities.UserEnt", b =>
+            modelBuilder.Entity("DevBoard.Domain.Auth.Entities.UserEnt", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -69,7 +72,7 @@ namespace DevBoard.Infrastructure.Migrations
                     b.ToTable("User", (string)null);
                 });
 
-            modelBuilder.Entity("DevBoard.Domain.User.Entities.UserRoleEnt", b =>
+            modelBuilder.Entity("DevBoard.Domain.Auth.Entities.UserRoleEnt", b =>
                 {
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
@@ -129,13 +132,13 @@ namespace DevBoard.Infrastructure.Migrations
 
             modelBuilder.Entity("DevBoard.Domain.Auth.Entities.UserRoleEnt", b =>
                 {
-                    b.HasOne("DevBoard.Domain.User.Entities.RoleEnt", "Role")
+                    b.HasOne("DevBoard.Domain.Auth.Entities.RoleEnt", "Role")
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DevBoard.Domain.User.Entities.UserEnt", "User")
+                    b.HasOne("DevBoard.Domain.Auth.Entities.UserEnt", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
