@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DevBoard.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250606213149_User_userrole_role")]
-    partial class User_userrole_role
+    [Migration("20250729172851_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,46 @@ namespace DevBoard.Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("DevBoard.Domain.Boards.Entities.BoardEnt", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Board", (string)null);
+                });
+
+            modelBuilder.Entity("DevBoard.Domain.Tickets.Entities.TicketEnt", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("AssignedId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AssignedId");
+
+                    b.ToTable("Ticket", (string)null);
+                });
 
             modelBuilder.Entity("DevBoard.Domain.User.Entities.RoleEnt", b =>
                 {
@@ -88,6 +128,24 @@ namespace DevBoard.Infrastructure.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("UserRole", (string)null);
+                });
+
+            modelBuilder.Entity("DevBoard.Domain.Boards.Entities.BoardEnt", b =>
+                {
+                    b.HasOne("DevBoard.Domain.User.Entities.UserEnt", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("DevBoard.Domain.Tickets.Entities.TicketEnt", b =>
+                {
+                    b.HasOne("DevBoard.Domain.User.Entities.UserEnt", "Assigned")
+                        .WithMany()
+                        .HasForeignKey("AssignedId");
+
+                    b.Navigation("Assigned");
                 });
 
             modelBuilder.Entity("DevBoard.Domain.User.Entities.UserRoleEnt", b =>

@@ -22,6 +22,46 @@ namespace DevBoard.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("DevBoard.Domain.Boards.Entities.BoardEnt", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Board", (string)null);
+                });
+
+            modelBuilder.Entity("DevBoard.Domain.Tickets.Entities.TicketEnt", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("AssignedId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AssignedId");
+
+                    b.ToTable("Ticket", (string)null);
+                });
+
             modelBuilder.Entity("DevBoard.Domain.User.Entities.RoleEnt", b =>
                 {
                     b.Property<Guid>("Id")
@@ -89,45 +129,23 @@ namespace DevBoard.Infrastructure.Migrations
 
             modelBuilder.Entity("DevBoard.Domain.Boards.Entities.BoardEnt", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.HasOne("DevBoard.Domain.User.Entities.UserEnt", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Board", (string)null);
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("DevBoard.Domain.Tickets.Entities.TicketEnt", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.HasOne("DevBoard.Domain.User.Entities.UserEnt", "Assigned")
+                        .WithMany()
+                        .HasForeignKey("AssignedId");
 
-                    b.Property<Guid?>("AssignedId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AssignedId");
-
-                    b.ToTable("Ticket", (string)null);
+                    b.Navigation("Assigned");
                 });
 
-            modelBuilder.Entity("DevBoard.Domain.Auth.Entities.UserRoleEnt", b =>
+            modelBuilder.Entity("DevBoard.Domain.User.Entities.UserRoleEnt", b =>
                 {
                     b.HasOne("DevBoard.Domain.User.Entities.RoleEnt", "Role")
                         .WithMany()
@@ -144,24 +162,6 @@ namespace DevBoard.Infrastructure.Migrations
                     b.Navigation("Role");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("DevBoard.Domain.Boards.Entities.BoardEnt", b =>
-                {
-                    b.HasOne("DevBoard.Domain.Auth.Entities.UserEnt", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("DevBoard.Domain.Tickets.Entities.TicketEnt", b =>
-                {
-                    b.HasOne("DevBoard.Domain.Auth.Entities.UserEnt", "Assigned")
-                        .WithMany()
-                        .HasForeignKey("AssignedId");
-
-                    b.Navigation("Assigned");
                 });
 #pragma warning restore 612, 618
         }

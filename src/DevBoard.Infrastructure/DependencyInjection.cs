@@ -22,8 +22,11 @@ namespace DevBoard.Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddScoped<IAuthService, AuthService>();
+            
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IUserService, UserService>();
+
+            services.AddScoped<IAuthService, AuthService>();
             services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
             services.AddScoped<IJwtService, JwtService>();
 
@@ -33,7 +36,7 @@ namespace DevBoard.Infrastructure
             services.AddScoped<IBoardService, BoardService>();
             services.AddScoped<IBoardRepository, BoardRepository>();
           
-            services.AddScoped<IUserService, UserService>();
+            
 
             return services;
         }

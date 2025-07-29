@@ -1,6 +1,5 @@
 ﻿using DevBoard.Domain.Shared;
 using DevBoard.Infrastructure.Data;
-using DevBoard.Infrastructure.Migrations;
 using Microsoft.EntityFrameworkCore;
 
 namespace DevBoard.Infrastructure.Shared

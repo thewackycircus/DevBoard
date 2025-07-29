@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DevBoard.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class User_userrole_role : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -41,6 +41,42 @@ namespace DevBoard.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Board",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Board", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Board_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Ticket",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AssignedId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Ticket", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Ticket_User_AssignedId",
+                        column: x => x.AssignedId,
+                        principalTable: "User",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UserRole",
                 columns: table => new
                 {
@@ -66,6 +102,16 @@ namespace DevBoard.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Board_UserId",
+                table: "Board",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Ticket_AssignedId",
+                table: "Ticket",
+                column: "AssignedId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UserRole_RoleId",
                 table: "UserRole",
                 column: "RoleId");
@@ -74,6 +120,12 @@ namespace DevBoard.Infrastructure.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Board");
+
+            migrationBuilder.DropTable(
+                name: "Ticket");
+
             migrationBuilder.DropTable(
                 name: "UserRole");
 
